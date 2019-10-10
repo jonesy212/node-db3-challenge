@@ -4,8 +4,11 @@ module.exports = {
     find,
     findById,
     findSchemeSteps,
-
+    add,
+    update,
+    remove
 }
+
 
 function find() {
     return db('schemes');
@@ -23,4 +26,25 @@ function findSchemeSteps(schemeId){
     .select('w.id', 'w.step_number', 'w.instructions', 's.scheme_name')
     .where({scheme_id: schemeId})
 }
+
+function add(scheme){
+    return db('schemes')
+        .insert(scheme, 'id')
+        .then(([id]) => {
+            return findById(id)
+        });     
+}
+
+function update(id, changes) {
+    return db('schemes')
+    .where({id})
+    .update(changes, '*')
+}
+
+function remove(id) {
+    return db('schemes')
+    .where({id})
+    .del();
+}
+
 
